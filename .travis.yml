@@ -8,8 +8,6 @@ jobs:
   - stage: test
     name: rubocop
     script: bundle exec rubocop
-    if: env(CD_TEST_IGNORE) IS NOT present
   - stage: test
     name: rspec
     script: gem install bundler & bundle exec rspec
-    if: env(CD_TEST_IGNORE) IS NOT present
