@@ -7,7 +7,7 @@ jobs:
   include:
   - stage: test
     name: rubocop
-    script: bundle exec rubocop
+    script: bundle install & bundle exec rubocop
   - stage: test
     name: rspec
     script: gem install bundler & bundle exec rspec
