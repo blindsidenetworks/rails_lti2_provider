@@ -34,7 +34,7 @@ module RailsLti2Provider
 
       tool_proxy = tool.tool_proxy
       registered_proxy = registration.tool_proxy
-      shared_secret = if tc_secret = registered_proxy.tc_half_shared_secret
+      shared_secret = if (tc_secret = registered_proxy.tc_half_shared_secret)
                         tc_secret + tool_proxy.security_contract.tp_half_shared_secret
                       else
                         tool_proxy.security_contract.shared_secret

@@ -15,7 +15,7 @@ ENGINE_RAILS_ROOT = File.join(File.dirname(__FILE__), '../')
 # run twice. It is recommended that you do not name files matching this glob to
 # end with _spec.rb. You can configure this pattern with the --pattern
 # option on the command line or in ~/.rspec, .rspec or `.rspec-local`.
-Dir[File.join(ENGINE_RAILS_ROOT, 'spec/support/**/*.rb')].each { |f| require f }
+Dir[File.join(ENGINE_RAILS_ROOT, 'spec/support/**/*.rb')].sort.each { |f| require f }
 
 # Checks for pending migrations before tests are run.
 # If you are not using ActiveRecord, you can remove this line.

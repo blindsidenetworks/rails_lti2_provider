@@ -36,13 +36,12 @@ module RailsLti2Provider
     def redirect_to_consumer(registration_result)
       url = registration_result[:return_url]
       url = add_param(url, 'tool_proxy_guid', registration_result[:tool_proxy_uuid])
-      if registration_result[:status] == 'success'
-        url = add_param(url, 'status', 'success')
-        redirect_to url
-      else
-        url = add_param(url, 'status', 'error')
-        redirect_to url
-      end
+      url = if registration_result[:status] == 'success'
+              add_param(url, 'status', 'success')
+            else
+              add_param(url, 'status', 'error')
+            end
+      redirect_to url
     end
 
     def add_param(url, param_name, param_value)

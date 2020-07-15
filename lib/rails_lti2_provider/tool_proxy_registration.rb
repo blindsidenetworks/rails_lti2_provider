@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RailsLti2Provider
   class ToolProxyRegistration
     attr_reader :tool_consumer_profile, :registration_state, :return_url
@@ -79,12 +81,17 @@ module RailsLti2Provider
         registered_proxy = registration_service.register_tool_proxy(tool_proxy)
         tool_proxy.tool_proxy_guid = registered_proxy.tool_proxy_guid
         tool_proxy.id = controller.send(engine_name).show_tool_url(registered_proxy.tool_proxy_guid)
-        shared_secret = if tc_secret = registered_proxy.tc_half_shared_secret
+        shared_secret = if (tc_secret = registered_proxy.tc_half_shared_secret)
                           tc_secret + tool_proxy.security_contract.tp_half_shared_secret
                         else
                           tool_proxy.security_contract.shared_secret
                         end
-        tp = Tool.create!(shared_secret: shared_secret, uuid: registered_proxy.tool_proxy_guid, tool_settings: tool_proxy.as_json, lti_version: tool_proxy.lti_version)
+        tp = Tool.create!(
+          shared_secret: shared_secret,
+          uuid: registered_proxy.tool_proxy_guid,
+          tool_settings: tool_proxy.as_json,
+          lti_version: tool_proxy.lti_version
+        )
         registration.update(workflow_state: 'registered', tool: tp)
         {
           tool_proxy_uuid: tool_proxy.tool_proxy_guid,
@@ -104,7 +111,8 @@ module RailsLti2Provider
       return_url = registration.registration_request.launch_presentation_return_url
       tool = registration.tool
       begin
-        confirmation_url = controller.send(engine_name).rereg_confirmation_url(tool.uuid, correlation_id: registration.correlation_id)
+        confirmation_url = controller.send(engine_name)
+                                     .rereg_confirmation_url(tool.uuid, correlation_id: registration.correlation_id)
         registered_proxy = registration_service.register_tool_proxy(tool_proxy, confirmation_url, tool.shared_secret)
         registration.update(workflow_state: 'rereg_pending', tool_proxy_json: registered_proxy.as_json)
         {
@@ -127,42 +135,49 @@ module RailsLti2Provider
       end
     end
 
-    private
+    class << self
+      private
 
-    def messages(messages)
-      messages.map do |m|
-        {
-          message_type: m['type'],
-          path: Rails.application.routes.url_for(only_path: true, host: @controller.request.host_with_port, controller: m['route']['controller'], action: m['route']['action']),
-          parameter: parameters(m['parameters']),
-          enabled_capability: capabilities(m)
-        }
+      def messages(messages)
+        messages.map do |m|
+          {
+            message_type: m['type'],
+            path: Rails.application.routes.url_for(
+              only_path: true,
+              host: @controller.request.host_with_port,
+              controller: m['route']['controller'],
+              action: m['route']['action']
+            ),
+            parameter: parameters(m['parameters']),
+            enabled_capability: capabilities(m)
+          }
+        end
       end
-    end
 
-    def parameters(params)
-      (params || []).map do |p|
-        # TODO: check if variable parameters are in the capabilities offered
-        IMS::LTI::Models::Parameter.new(p.symbolize_keys)
+      def parameters(params)
+        (params || []).map do |p|
+          # TODO: check if variable parameters are in the capabilities offered
+          IMS::LTI::Models::Parameter.new(p.symbolize_keys)
+        end
       end
-    end
 
-    def capabilities(message)
-      req_capabilities = message['required_capabilities'] || []
-      opt_capabilities = message['optional_capabilities'] || []
-      raise UnsupportedCapabilitiesError unless (req_capabilities - (tool_consumer_profile.capability_offered || [])).size == 0
+      def capabilities(message)
+        req_capabilities = message['required_capabilities'] || []
+        opt_capabilities = message['optional_capabilities'] || []
+        raise UnsupportedCapabilitiesError unless (req_capabilities - (tool_consumer_profile.capability_offered || [])).empty?
 
-      req_capabilities + opt_capabilities
-    end
-
-    def self.engine_name
-      engine = Rails.application.routes.named_routes.find do |r|
-        r[1].app.instance_variable_defined?('@app') && r[1].app.app == RailsLti2Provider::Engine
+        req_capabilities + opt_capabilities
       end
-      engine[1].name
-    end
 
-    class UnsupportedCapabilitiesError < StandardError
+      def self.engine_name
+        engine = Rails.application.routes.named_routes.find do |r|
+          r[1].app.instance_variable_defined?('@app') && r[1].app.app == RailsLti2Provider::Engine
+        end
+        engine[1].name
+      end
+
+      class UnsupportedCapabilitiesError < StandardError
+      end
     end
   end
 end

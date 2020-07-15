@@ -13,9 +13,8 @@ module RailsLti2Provider
     end
 
     initializer :resource_handlers do |_app|
-      controllers = {}
       Dir[Rails.root.join('config', 'resource_handlers', '*.yml')].each do |yml|
-        config = YAML.load(File.read(yml)).with_indifferent_access
+        config = YAML.safe_load(File.read(yml)).with_indifferent_access
         RESOURCE_HANDLERS << config
       end
     end
