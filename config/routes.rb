@@ -1,5 +1,6 @@
-RailsLti2Provider::Engine.routes.draw do
+# frozen_string_literal: true
 
+RailsLti2Provider::Engine.routes.draw do
   Rails.application.routes.draw do
     RailsLti2Provider::RESOURCE_HANDLERS.each do |config|
       config[:messages].each do |message|
@@ -17,6 +18,4 @@ RailsLti2Provider::Engine.routes.draw do
 
   put 'tool_proxy/:tool_proxy_guid', to: 'tool#apply_rereg', as: :rereg_confirmation
   delete 'tool_proxy/:tool_proxy_guid', to: 'tool#delete_rereg'
-
-
 end
