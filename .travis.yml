@@ -13,9 +13,6 @@ jobs:
     name: test
     before_script:
       - bundle install
-    before_script:
-      - bundle exec rake db:create
-      - bundle exec rake db:migrate
     script:
       - export
       - bundle exec rails test
