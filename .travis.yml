@@ -8,6 +8,15 @@ jobs:
   - stage: test
     name: rubocop
     script: bundle install & bundle exec rubocop
+    if: env(TEST_IGNORE) IS NOT present
   - stage: test
-    name: rspec
-    script: gem install bundler & bundle exec rspec
+    name: test
+    before_script:
+      - bundle install
+    before_script:
+      - bundle exec rake db:create
+      - bundle exec rake db:migrate
+    script:
+      - export
+      - bundle exec rails test
+    if: env(TEST_IGNORE) IS NOT present
