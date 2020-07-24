@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddVersionAndRenameToolProxyModel < ActiveRecord::Migration[4.2]
   def change
     rename_table :rails_lti2_provider_tool_proxies, :rails_lti2_provider_tools
@@ -8,16 +10,15 @@ class AddVersionAndRenameToolProxyModel < ActiveRecord::Migration[4.2]
 
     reversible do |dir|
       dir.up do
-        #set lti_version to LTI-2p0
+        # set lti_version to LTI-2p0
         execute <<-SQL
         UPDATE rails_lti2_provider_tools SET lti_version = 'LTI-2p0';
         SQL
       end
 
       dir.down do
-        #lti_version will get dropped so no need to do anything
+        # lti_version will get dropped so no need to do anything
       end
     end
-
   end
 end

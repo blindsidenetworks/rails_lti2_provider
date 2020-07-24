@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateRailsLti2ProviderLtiLaunches < ActiveRecord::Migration[4.2]
   def change
     create_table :rails_lti2_provider_lti_launches do |t|
