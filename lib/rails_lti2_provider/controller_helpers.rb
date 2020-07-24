@@ -1,6 +1,7 @@
+# frozen_string_literal: true
+
 module RailsLti2Provider
   module ControllerHelpers
-
     def lti_authentication
       lti_message = IMS::LTI::Models::Messages::Message.generate(request.request_parameters)
       lti_message.launch_url = request.url
@@ -14,15 +15,14 @@ module RailsLti2Provider
     def registration_request
       registration_request = IMS::LTI::Models::Messages::Message.generate(params)
       @registration = RailsLti2Provider::Registration.new(
-          registration_request_params: registration_request.post_params,
-          tool_proxy_json: RailsLti2Provider::ToolProxyRegistration.new(registration_request, self).tool_proxy.as_json
+        registration_request_params: registration_request.post_params,
+        tool_proxy_json: RailsLti2Provider::ToolProxyRegistration.new(registration_request, self).tool_proxy.as_json
       )
       if registration_request.is_a? IMS::LTI::Models::Messages::ToolProxyUpdateRequest
         @registration.tool = Tool.where(uuid: params['oauth_consumer_key']).first
         @registration.correlation_id = SecureRandom.hex(64)
       end
       @registration.save!
-
     end
 
     def register_proxy(registration)
@@ -36,13 +36,12 @@ module RailsLti2Provider
     def redirect_to_consumer(registration_result)
       url = registration_result[:return_url]
       url = add_param(url, 'tool_proxy_guid', registration_result[:tool_proxy_uuid])
-      if registration_result[:status] == 'success'
-        url = add_param(url, 'status', 'success')
-        redirect_to url
-      else
-        url = add_param(url, 'status', 'error')
-        redirect_to url
-      end
+      url = if registration_result[:status] == 'success'
+              add_param(url, 'status', 'success')
+            else
+              add_param(url, 'status', 'error')
+            end
+      redirect_to url
     end
 
     def add_param(url, param_name, param_value)
@@ -51,6 +50,5 @@ module RailsLti2Provider
       uri.query = URI.encode_www_form(params)
       uri.to_s
     end
-
   end
 end

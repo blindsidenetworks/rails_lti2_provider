@@ -1,0 +1,19 @@
+sudo: required
+language: ruby
+cache: bundler
+rvm:
+- 2.5.1
+jobs:
+  include:
+  - stage: test
+    name: rubocop
+    script: bundle install & bundle exec rubocop
+    if: env(TEST_IGNORE) IS NOT present
+  - stage: test
+    name: test
+    before_script:
+      - bundle install
+    script:
+      - export
+      - bundle exec rails test
+    if: env(TEST_IGNORE) IS NOT present
