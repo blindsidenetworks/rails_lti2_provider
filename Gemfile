@@ -1,6 +1,4 @@
-# frozen_string_literal: true
-
-source 'https://rubygems.org'
+source "https://rubygems.org"
 
 # Declare your gem's dependencies in rails_lti2_provider.gemspec.
 # Bundler will treat runtime dependencies like base dependencies, and

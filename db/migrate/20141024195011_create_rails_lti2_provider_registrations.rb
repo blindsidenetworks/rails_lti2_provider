@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class CreateRailsLti2ProviderRegistrations < ActiveRecord::Migration[4.2]
   def change
     create_table :rails_lti2_provider_registrations do |t|

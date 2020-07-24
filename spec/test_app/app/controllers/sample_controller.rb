@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class SampleController < ApplicationController
   include RailsLti2Provider::ControllerHelpers
 
@@ -8,6 +6,8 @@ class SampleController < ApplicationController
   after_action :disable_xframe_header, only: :launch
 
   def launch
+
     render text: 'Hello World'
   end
+
 end
