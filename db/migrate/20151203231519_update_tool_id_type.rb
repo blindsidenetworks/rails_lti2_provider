@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class UpdateToolIdType < ActiveRecord::Migration[4.2]
+class UpdateToolIdType < ActiveRecord::Migration[6.0]
   def change
     if defined?(ActiveRecord::ConnectionAdapters::PostgreSQLAdapter) &&
        ActiveRecord::Base.connection.instance_of?(ActiveRecord::ConnectionAdapters::PostgreSQLAdapter)

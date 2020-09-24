@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateRailsLti2ProviderRegistrations < ActiveRecord::Migration[4.2]
+class CreateRailsLti2ProviderRegistrations < ActiveRecord::Migration[6.0]
   def change
     create_table :rails_lti2_provider_registrations do |t|
       t.string :uuid

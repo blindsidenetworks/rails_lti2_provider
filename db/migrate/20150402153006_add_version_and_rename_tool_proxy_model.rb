@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddVersionAndRenameToolProxyModel < ActiveRecord::Migration[4.2]
+class AddVersionAndRenameToolProxyModel < ActiveRecord::Migration[6.0]
   def change
     rename_table :rails_lti2_provider_tool_proxies, :rails_lti2_provider_tools
     add_column :rails_lti2_provider_tools, :lti_version, :string
