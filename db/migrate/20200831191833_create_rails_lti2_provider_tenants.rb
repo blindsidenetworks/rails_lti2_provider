@@ -6,6 +6,7 @@ class CreateRailsLti2ProviderTenants < ActiveRecord::Migration[6.0]
       t.timestamps
     end
     add_index 'rails_lti2_provider_tenants', ['uid'], :name => 'index_tenant_uid', unique: true
+    RailsLti2Provider::Tenant.create uid: ''
   end
 
   def self.down
