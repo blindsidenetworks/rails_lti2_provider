@@ -22,12 +22,6 @@ Layout/LineLength:
   Max: 200
 Metrics:
   Enabled: false
-Naming/AccessorMethodName:
-  Exclude:
-    - app/controllers/bigbluebutton_api_controller.rb
-Naming/PredicateName:
-  Exclude:
-    - app/controllers/bigbluebutton_api_controller.rb
 Naming/MethodParameterName:
   MinNameLength: 2
 Rails:
@@ -63,6 +57,3 @@ Style/TrailingCommaInArrayLiteral:
   EnforcedStyleForMultiline: consistent_comma
 Style/TrailingCommaInHashLiteral:
   EnforcedStyleForMultiline: consistent_comma
-Lint/LiteralAsCondition:
-  Exclude:
-    - config/initializers/doorkeeper.rb

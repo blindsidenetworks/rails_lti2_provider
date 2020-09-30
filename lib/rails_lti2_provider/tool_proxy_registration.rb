@@ -126,11 +126,9 @@ module RailsLti2Provider
     def resource_handlers
       @resource_handlers ||= RailsLti2Provider::RESOURCE_HANDLERS.map do |handler|
         IMS::LTI::Models::ResourceHandler.from_json(
-          {
-            resource_type: { code: handler['code'] },
-            resource_name: handler['name'],
-            message: messages(handler['messages']),
-          }
+          resource_type: { code: handler['code'] },
+          resource_name: handler['name'],
+          message: messages(handler['messages'])
         )
       end
     end
