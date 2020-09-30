@@ -11,7 +11,7 @@ class RailsLti2Provider
     class_option :action, type: :string
 
     def create_resource_handler
-      template 'resource_handler.yml.erb', "config/resource_handlers/#{name.underscore}.yml"
+      template('resource_handler.yml.erb', "config/resource_handlers/#{name.underscore}.yml")
     end
   end
 end

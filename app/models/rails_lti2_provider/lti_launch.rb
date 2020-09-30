@@ -3,8 +3,8 @@
 require 'ims/lti'
 
 module RailsLti2Provider
-  class LtiLaunch < ActiveRecord::Base
-    validates_presence_of :tool_id, :nonce
+  class LtiLaunch < ApplicationRecord
+    validates :tool_id, :nonce, presence: true
     belongs_to :tool
     serialize :message
 
@@ -18,16 +18,17 @@ module RailsLti2Provider
       end
       raise Unauthorized, :invalid_nonce if tool.lti_launches.where(nonce: lti_message.oauth_nonce).count.positive?
       raise Unauthorized, :request_to_old if DateTime.strptime(lti_message.oauth_timestamp, '%s') < 5.minutes.ago
+
       tool.lti_launches.where('created_at > ?', 1.day.ago).delete_all
       tool.lti_launches.create(nonce: lti_message.oauth_nonce, message: lti_message.post_params)
     end
 
     def message
-      IMS::LTI::Models::Messages::Message.generate(read_attribute(:message))
+      IMS::LTI::Models::Messages::Message.generate(self[:message])
     end
 
     def jwt_body
-      read_attribute(:message)
+      self[:message]
     end
 
     class Unauthorized < StandardError

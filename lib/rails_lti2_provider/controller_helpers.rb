@@ -9,7 +9,7 @@ module RailsLti2Provider
     end
 
     def disable_xframe_header
-      response.headers.except! 'X-Frame-Options'
+      response.headers.except!('X-Frame-Options')
     end
 
     def registration_request
@@ -18,7 +18,7 @@ module RailsLti2Provider
         registration_request_params: registration_request.post_params,
         tool_proxy_json: RailsLti2Provider::ToolProxyRegistration.new(registration_request, self).tool_proxy.as_json
       )
-      if registration_request.is_a? IMS::LTI::Models::Messages::ToolProxyUpdateRequest
+      if registration_request.is_a?(IMS::LTI::Models::Messages::ToolProxyUpdateRequest)
         @registration.tool = Tool.where(uuid: params['oauth_consumer_key']).first
         @registration.correlation_id = SecureRandom.hex(64)
       end
@@ -26,7 +26,7 @@ module RailsLti2Provider
     end
 
     def register_proxy(registration)
-      if registration.registration_request.is_a? IMS::LTI::Models::Messages::ToolProxyUpdateRequest
+      if registration.registration_request.is_a?(IMS::LTI::Models::Messages::ToolProxyUpdateRequest)
         RailsLti2Provider::ToolProxyRegistration.reregister(registration, self)
       else
         RailsLti2Provider::ToolProxyRegistration.register(registration, self)
@@ -41,7 +41,7 @@ module RailsLti2Provider
             else
               add_param(url, 'status', 'error')
             end
-      redirect_to url
+      redirect_to(url)
     end
 
     def add_param(url, param_name, param_value)

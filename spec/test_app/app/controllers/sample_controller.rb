@@ -8,6 +8,6 @@ class SampleController < ApplicationController
   after_action :disable_xframe_header, only: :launch
 
   def launch
-    render text: 'Hello World'
+    render(text: 'Hello World')
   end
 end

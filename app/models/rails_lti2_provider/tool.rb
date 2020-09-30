@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 module RailsLti2Provider
-  class Tool < ActiveRecord::Base
-    validates_presence_of :shared_secret, :uuid, :tool_settings, :lti_version
+  class Tool < ApplicationRecord
+    validates :shared_secret, :uuid, :tool_settings, :lti_version, presence: true
     serialize :tool_settings
-    belongs_to :tenant, foreign_key: :tenant_id
-    has_many :lti_launches
-    has_many :registrations
+    belongs_to :tenant, foreign_key: :tenant_id, inverse_of: :tools
+    has_many :lti_launches, dependent: :restrict_with_exception
+    has_many :registrations, dependent: :restrict_with_exception
 
     def tool_proxy
       IMS::LTI::Models::ToolProxy.from_json(tool_settings)
@@ -14,8 +14,8 @@ module RailsLti2Provider
 
     def self.find_by_issuer(issuer, options = {})
       if options.any?
-        puts options.inspect
-        Tool.where(uuid: issuer).each do |tool|
+        Rails.logger.warn(options.inspect)
+        Tool.where(uuid: issuer).find_each do |tool|
           tool_settings = JSON.parse(tool.tool_settings)
           match = true
           options.each do |key, _value|

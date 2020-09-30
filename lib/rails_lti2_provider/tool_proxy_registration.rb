@@ -50,12 +50,12 @@ module RailsLti2Provider
     end
 
     def product_instance
-      unless @product_instance
-        product_instance_config = Rails.root.join('config', 'product_instance.json')
-        raise 'MissingProductInstaceConfig' unless File.exist? product_instance_config
+      return if @product_instance
 
-        @product_instance = IMS::LTI::Models::ProductInstance.new.from_json(File.read(product_instance_config))
-      end
+      product_instance_config = Rails.root.join('config/product_instance.json')
+      raise 'MissingProductInstaceConfig' unless File.exist?(product_instance_config)
+
+      @product_instance = IMS::LTI::Models::ProductInstance.new.from_json(File.read(product_instance_config))
     end
 
     def security_contract
@@ -96,7 +96,7 @@ module RailsLti2Provider
         {
           tool_proxy_uuid: tool_proxy.tool_proxy_guid,
           return_url: return_url,
-          status: 'success'
+          status: 'success',
         }
       end
     end
@@ -118,7 +118,7 @@ module RailsLti2Provider
         {
           tool_proxy_uuid: tool_proxy.tool_proxy_guid,
           return_url: return_url,
-          status: 'success'
+          status: 'success',
         }
       end
     end
@@ -129,7 +129,7 @@ module RailsLti2Provider
           {
             resource_type: { code: handler['code'] },
             resource_name: handler['name'],
-            message: messages(handler['messages'])
+            message: messages(handler['messages']),
           }
         )
       end
@@ -149,7 +149,7 @@ module RailsLti2Provider
               action: m['route']['action']
             ),
             parameter: parameters(m['parameters']),
-            enabled_capability: capabilities(m)
+            enabled_capability: capabilities(m),
           }
         end
       end

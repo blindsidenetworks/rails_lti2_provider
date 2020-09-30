@@ -19,7 +19,7 @@ module RailsLti2Provider
         response = {
           return_url: registration.registration_request.launch_presentation_return_url,
           status: 'error',
-          message: 'Failed to create a tool proxy'
+          message: 'Failed to create a tool proxy',
         }
       end
       redirect_to_consumer(response)
@@ -30,7 +30,7 @@ module RailsLti2Provider
     def apply_rereg
       tool = Tool.where(uuid: params[:tool_proxy_guid]).first
       registration = tool.registrations.where(correlation_id: params[:correlation_id]).first
-      render status: :not_found and return unless registration
+      render(status: :not_found) and return unless registration
 
       tool_proxy = tool.tool_proxy
       registered_proxy = registration.tool_proxy
@@ -46,13 +46,13 @@ module RailsLti2Provider
         tool.save!
         registration.update!(workflow_state: 'registered')
       end
-      render nothing: true
+      render(nothing: true)
     end
 
     def delete_rereg
       tool = Tool.where(uuid: params[:tool_proxy_guid]).first
       registration = tool.registrations.where(correlation_id: params[:correlation_id]).first
-      render status: :not_found and return unless registration
+      render(status: :not_found) and return unless registration
 
       registration.delete!
     end

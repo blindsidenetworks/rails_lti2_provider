@@ -2,11 +2,11 @@
 
 class AddVersionAndRenameToolProxyModel < ActiveRecord::Migration[6.0]
   def change
-    rename_table :rails_lti2_provider_tool_proxies, :rails_lti2_provider_tools
-    add_column :rails_lti2_provider_tools, :lti_version, :string
-    rename_column :rails_lti2_provider_tools, :proxy_json, :tool_settings
-    rename_column :rails_lti2_provider_registrations, :tool_proxy_id, :tool_id
-    rename_column :rails_lti2_provider_lti_launches, :tool_proxy_id, :tool_id
+    rename_table(:rails_lti2_provider_tool_proxies, :rails_lti2_provider_tools)
+    add_column(:rails_lti2_provider_tools, :lti_version, :string)
+    rename_column(:rails_lti2_provider_tools, :proxy_json, :tool_settings)
+    rename_column(:rails_lti2_provider_registrations, :tool_proxy_id, :tool_id)
+    rename_column(:rails_lti2_provider_lti_launches, :tool_proxy_id, :tool_id)
 
     reversible do |dir|
       dir.up do
