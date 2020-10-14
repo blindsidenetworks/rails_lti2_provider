@@ -2,7 +2,7 @@
 
 class CreateRailsLti2ProviderTenants < ActiveRecord::Migration[6.0]
   def self.up
-    create_table :rails_lti2_provider_tenants, if_not_exists: true do |t|
+    create_table(:rails_lti2_provider_tenants, if_not_exists: true) do |t|
       t.string(:uid)
 
       t.timestamps

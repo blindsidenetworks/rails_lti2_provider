@@ -11,7 +11,7 @@ class AddVersionAndRenameToolProxyModel < ActiveRecord::Migration[6.0]
     reversible do |dir|
       dir.up do
         # set lti_version to LTI-2p0
-        execute <<-SQL
+        execute(<<-SQL)
         UPDATE rails_lti2_provider_tools SET lti_version = 'LTI-2p0';
         SQL
       end
