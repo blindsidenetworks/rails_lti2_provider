@@ -2,7 +2,8 @@
 
 module RailsLti2Provider
   class Tool < ApplicationRecord
-    validates :shared_secret, :uuid, :tool_settings, :lti_version, presence: true
+    validates :tool_settings, :lti_version, presence: true
+    validates :uuid, uniqueness: { scope: [:shared_secret, :deployment_id], message: "Tool already exists"}
     serialize :tool_settings
     belongs_to :tenant, inverse_of: :tools
     has_many :lti_launches, dependent: :restrict_with_exception
