@@ -11,6 +11,7 @@ module RailsLti2Provider
     def self.check_launch(lti_message)
       tool = Tool.find_by_uuid(lti_message.oauth_consumer_key)
       raise Unauthorized, :invalid_key unless tool
+      raise Unauthorized, :expired_key unless tool.expired_at.nil? || tool.expired_at > Time.now
       unless IMS::LTI::Services::MessageAuthenticator
              .new(lti_message.launch_url,
                   lti_message.post_params.merge(lti_message.oauth_params), tool.shared_secret).valid_signature?
