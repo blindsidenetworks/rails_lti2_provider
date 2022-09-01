@@ -2,6 +2,8 @@
 
 source 'https://rubygems.org'
 
+gem 'ims-lti', git: 'https://github.com/blindsidenetworks/ims-lti.git', tag: 'v2.3.2.1'
+
 # Declare your gem's dependencies in rails_lti2_provider.gemspec.
 # Bundler will treat runtime dependencies like base dependencies, and
 # development dependencies will be added by default to the :development group.
