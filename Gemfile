@@ -2,6 +2,8 @@
 
 source 'https://rubygems.org'
 
+gem 'rails', '~> 6.1'
+
 gem 'ims-lti', git: 'https://github.com/blindsidenetworks/ims-lti.git', tag: 'v2.3.2.1'
 
 gem 'simple_oauth', git: 'https://github.com/blindsidenetworks/simple_oauth.git', tag: 'v0.3.1.1'
