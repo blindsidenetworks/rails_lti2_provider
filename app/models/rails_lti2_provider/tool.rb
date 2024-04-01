@@ -24,5 +24,9 @@ module RailsLti2Provider
         end
       end
     end
+
+    def settings
+      JSON.parse(tool_settings)
+    end
   end
 end
