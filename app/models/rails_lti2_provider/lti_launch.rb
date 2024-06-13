@@ -46,7 +46,7 @@ module RailsLti2Provider
     class Unauthorized < StandardError
       attr_reader :error
 
-      def initialize(error = :unknown)
+      def initialize(error = :unknown) # rubocop:disable Lint/MissingSuper
         @error = error
       end
     end
