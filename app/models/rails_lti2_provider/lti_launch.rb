@@ -12,11 +12,18 @@ module RailsLti2Provider
       tool = Tool.find_by_uuid(lti_message.oauth_consumer_key)
       raise Unauthorized, :invalid_key unless tool
       raise Unauthorized, :expired_key unless tool.expired_at.nil? || tool.expired_at > Time.now
-      unless IMS::LTI::Services::MessageAuthenticator
-             .new(lti_message.launch_url,
-                  lti_message.post_params.merge(lti_message.oauth_params), tool.shared_secret).valid_signature?
-        raise Unauthorized, :invalid_signature
+
+      # Split the shared_secret string into an array of secrets
+      secrets = tool.shared_secret.split(',')
+
+      # Iterate over each secret and check if the signature is valid
+      valid_signature = secrets.any? do |secret|
+        IMS::LTI::Services::MessageAuthenticator
+          .new(lti_message.launch_url, lti_message.post_params.merge(lti_message.oauth_params), secret.strip)
+          .valid_signature?
       end
+
+      raise Unauthorized, :invalid_signature unless valid_signature
       raise Unauthorized, :invalid_nonce if tool.lti_launches.where(nonce: lti_message.oauth_nonce).count.positive?
       raise Unauthorized, :request_too_old if DateTime.strptime(lti_message.oauth_timestamp, '%s') < 5.minutes.ago
 
@@ -38,7 +45,7 @@ module RailsLti2Provider
     class Unauthorized < StandardError
       attr_reader :error
 
-      def initialize(error = :unknown)
+      def initialize(error = :unknown) # rubocop:disable Lint/MissingSuper
         @error = error
       end
     end
