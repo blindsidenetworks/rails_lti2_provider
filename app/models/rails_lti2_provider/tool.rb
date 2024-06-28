@@ -16,11 +16,11 @@ module RailsLti2Provider
     def self.find_by_issuer(issuer, options = {})
       return Tool.find_by(uuid: issuer) unless options.any?
 
-      Rails.logger.warn(options.inspect)
+      Rails.logger.debug(options.inspect)
       Tool.where(uuid: issuer).find_each do |tool|
         tool_settings = JSON.parse(tool.tool_settings)
-        options.each do |key, _value|
-          return tool if tool_settings[key] == options[key]
+        options.each do |key, value|
+          return tool if tool_settings[key.to_s] == value
         end
       end
     end
